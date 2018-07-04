@@ -6,10 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+//Essa classe é basicamente inteira JPA
 @Entity
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	//unica coisa que criei nessa classe foi os atributos, o resto é tudo codigo gerado pelo eclipse
+	
+	//@id diz que o proximo atributo é id, @generatedvalue atribui uma sequencia de valores automaticamente
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;

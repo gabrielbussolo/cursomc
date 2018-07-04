@@ -20,6 +20,7 @@ public class CursomcApplication implements CommandLineRunner{
 		SpringApplication.run(CursomcApplication.class, args);
 	}
 
+	//Gambiarra para instanciar classes e jogar no banco h2
 	@Override
 	public void run(String... args) throws Exception {
 		Categoria cat1 = new Categoria(null,"Informática");
