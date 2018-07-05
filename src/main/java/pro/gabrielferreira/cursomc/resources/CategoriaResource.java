@@ -19,10 +19,11 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService service;
 	
-	//novamente rota, porem informo pra qual metodo ela vai responder, ou seja se eu der um post aqui, nao faz nada.
+	//novamente rota, porem informo pra qual metodo ela vai responder, ou seja posso ter um metodo post e get na mesma rota fazendo coisas diferentes.
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Categoria obj = service.buscar(id);	
+	public ResponseEntity<?> find(/*anotacao pra dizer que to pegando o valor pela URI*/@PathVariable Integer id) {
+		Categoria obj = service.buscar(id);	//novamente a separacao de responsabilidades vide categoria service.
+		//chamo categoria service, que chama categoria resource, cada classe com sua responsabilidade
 		return ResponseEntity.ok().body(obj);
 	}
 }

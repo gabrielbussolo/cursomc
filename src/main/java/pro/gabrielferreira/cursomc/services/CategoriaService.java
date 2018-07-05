@@ -18,6 +18,7 @@ public class CategoriaService {
 	//ou seja, essa é uma "regra" que quando der um buscar, vai retornar um item por id
 	public Categoria buscar(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
+		//reparar a separacao das responsabilidades, por exemplo aqui instanciei um repo ali em cima, e uso o metodo dele de buscar no banco por id, cada classe com sua responsabilidade
 		return obj.orElse(null);
 	}
 }
