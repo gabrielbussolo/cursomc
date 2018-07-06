@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 //entidade normal assim como categoria
 @Entity
 public class Produto implements Serializable{
@@ -24,6 +26,7 @@ public class Produto implements Serializable{
 	private String nome;
 	private Double preco;
 	
+	@JsonBackReference
 	//esse é o lado onde esta as configuracoes do many to many, entao essa é a entidade dominante.
 	@ManyToMany
 	@JoinTable(

@@ -10,9 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 //Essa classe é basicamente inteira JPA
 @Entity
-public class Categoria implements Serializable {
+public class Categoria implements Serializable { 
+	//serializar a classe serve para tirar ela de binario, e colocar no banco, ou servir ela como json
+	//https://pt.stackoverflow.com/questions/88270/qual-a-finalidade-da-interface-serializable
 	private static final long serialVersionUID = 1L;
 	
 	//unica coisa que criei nessa classe foi os atributos e o relacionamento, o resto é tudo codigo gerado pelo eclipse
@@ -23,6 +27,8 @@ public class Categoria implements Serializable {
 	private Integer id;
 	private String nome;
 	
+	//tratando referencia ciclica (nao entendi, pesquisar mais)
+	@JsonManagedReference
 	@ManyToMany(mappedBy="categorias") //indico que este é o lado dominado.
 	private List<Produto> produtos = new ArrayList<>(); //por ser many to many, crio uma lista para receber os produtos de determinada categoria
 	
