@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import pro.gabrielferreira.cursomc.domain.enums.TipoCliente;
 
 //Grande diferenca dessa entidade esta nos atributos telefones e tipo
@@ -31,6 +33,7 @@ public class Cliente implements Serializable{
 	private Integer tipo; /*eu recebo um TipoCliente no construtor, 
 	porem, no construtor mesmo pego apenas o codigo do tipo pra instanciar meu objeto.*/
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
