@@ -20,29 +20,37 @@ import pro.gabrielferreira.cursomc.domain.enums.TipoCliente;
 
 //Grande diferenca dessa entidade esta nos atributos telefones e tipo
 @Entity
-public class Cliente implements Serializable{
-	
+public class Cliente implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
-	private Integer tipo; /*eu recebo um TipoCliente no construtor, 
-	porem, no construtor mesmo pego apenas o codigo do tipo pra instanciar meu objeto.*/
-	
+	private Integer tipo; /*
+							 * eu recebo um TipoCliente no construtor, porem, no construtor mesmo pego
+							 * apenas o codigo do tipo pra instanciar meu objeto.
+							 */
+
 	@JsonManagedReference
-	@OneToMany(mappedBy="cliente")
+	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
-	
-	//aqui é declarada telefones, como uma entidade, ja relacionada com o cliente, por ser uma entidade muito simples
-	@ElementCollection // declaracao
-	@CollectionTable(name="TELEFONE") //qual vai ser o nome da tabela
+
+	// aqui é declarada telefones, como uma entidade, ja relacionada com o cliente,
+	// por ser uma entidade muito simples
+	@ElementCollection // declaracao de que vai ser uma tabaela
+	@CollectionTable(name = "TELEFONE") // qual vai ser o nome da tabela
 	private Set<String> telefones = new HashSet<>();
 	
-	public Cliente() {}
+	//relacionamento com pedidos
+	@OneToMany(mappedBy="cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
+
+	public Cliente() {
+	}
 
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
 		super();
@@ -50,9 +58,10 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipo = tipo.getCod(); //recebendo um TipoCliente no parametro, mas pegando o cod e instanciando um int 
+		this.tipo = tipo.getCod(); // recebendo um TipoCliente no parametro, mas pegando o cod e instanciando um
+									// int
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -84,16 +93,19 @@ public class Cliente implements Serializable{
 	public void setCpfOuCnpj(String cpfOuCnpj) {
 		this.cpfOuCnpj = cpfOuCnpj;
 	}
-	
+
 	/* START - TipoCliente */
 	public TipoCliente getTipo() {
-		return TipoCliente.toEnum(tipo); /*pra devolver uso a funcao static feita no enum, e passo o codigo int 
-		instanciado na classe, isso retorna o TipoCliente*/
+		return TipoCliente.toEnum(tipo); /*
+											 * pra devolver uso a funcao static feita no enum, e passo o codigo int
+											 * instanciado na classe, isso retorna o TipoCliente
+											 */
 	}
 
 	public void setTipo(TipoCliente tipo) {
 		this.tipo = tipo.getCod(); // pra setar passo um tipo no parametro, mas seto só codigo dele
 	}
+
 	/* END */
 	public List<Endereco> getEnderecos() {
 		return enderecos;
@@ -109,6 +121,14 @@ public class Cliente implements Serializable{
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	public static long getSerialversionuid() {
@@ -139,6 +159,5 @@ public class Cliente implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }
