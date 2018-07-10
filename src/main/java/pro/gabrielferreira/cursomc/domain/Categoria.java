@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 //Essa classe é basicamente inteira JPA
 @Entity
 public class Categoria implements Serializable { 
@@ -28,7 +26,7 @@ public class Categoria implements Serializable {
 	private String nome;
 	
 	//tratando referencia ciclica (nao entendi, pesquisar mais)
-	@JsonManagedReference
+	
 	@ManyToMany(mappedBy="categorias") //indico que este é o lado dominado.
 	private List<Produto> produtos = new ArrayList<>(); //por ser many to many, crio uma lista para receber os produtos de determinada categoria
 	
