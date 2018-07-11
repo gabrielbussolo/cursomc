@@ -1,4 +1,4 @@
-package pro.gabrielferreira.cursomc.resources.exception;
+package pro.gabrielferreira.cursomc.resources.exceptions;
 
 import java.io.Serializable;
 //classe basica "domain", apenas para instanciar
