@@ -11,6 +11,15 @@ import pro.gabrielferreira.cursomc.domain.Categoria;
  * JpaRepository ja tem varios metodos prontos, find, findall, getbyid. ps:tops
  */
 @Repository
-public interface CategoriaRepository extends JpaRepository<Categoria, Integer>{
-	
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
+	/*
+	 * base pra fazer findAll categorias pegando apenas o que eu quero e jogando pro dto direto do banco, pelo JOAO
+	 * 
+	 * @Query("SELECT new br.com.softplan.ungp.eng.sib.dto.importacaoshp.ImportacaoShpTrechoGeoToValidateDTO(g.cdImportShpGeo, g.importShpTrecho.cdImportShpTrecho, g.importShpTrecho.sgRodovia, g.gmInicio, g.gmFim) "
+	 * + " FROM ImportacaoShpTrechoGeo g " // + " JOIN g.importShpTrecho " // +
+	 * " JOIN g.importShpTrecho.importShp " // +
+	 * " where g.importShpTrecho.importShp.cdImportShp = :cdImportShp ")
+	 * List<ImportacaoShpTrechoGeoToValidateDTO>
+	 * findByCdImportShpTrecho(@Param("cdImportShp") Long cdImportShp);
+	 */
 }

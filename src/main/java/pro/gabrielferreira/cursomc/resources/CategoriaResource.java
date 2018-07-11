@@ -1,6 +1,8 @@
 package pro.gabrielferreira.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import pro.gabrielferreira.cursomc.domain.Categoria;
+import pro.gabrielferreira.cursomc.dto.CategoriaDTO;
 import pro.gabrielferreira.cursomc.services.CategoriaService;
 
 //@restcontroler, digo que essa classe é um controller
@@ -62,4 +65,17 @@ public class CategoriaResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	//retorna uma lista com as categorias
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll(){
+		//retorna uma lista de objetos categorias, só que categoria *entidade* tem uma lista de objetos produtos nela, que volta junto
+		List<Categoria> objList = service.findAll(); 
+		//pra resolver, usa-se um DTO com apenas os dados que quero
+		//essa linha cria uma lista de CategoriaDTO 
+		List<CategoriaDTO> listDTO = objList.stream() //
+				.map(obj -> new CategoriaDTO(obj)) //
+				.collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
 }
