@@ -18,7 +18,7 @@ public class PedidoService {
 
 	// ou seja, essa é uma "regra" que quando der um buscar, vai retornar um item
 	// por id
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		Optional<Pedido> obj = repo.findById(id);
 		// reparar a separacao das responsabilidades, por exemplo aqui instanciei um
 		// repo ali em cima, e uso o metodo dele de buscar no banco por id, cada classe

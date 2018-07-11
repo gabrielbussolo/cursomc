@@ -21,8 +21,8 @@ public class PedidoResource {
 	
 	//novamente rota, porem informo pra qual metodo ela vai responder, ou seja posso ter um metodo post e get na mesma rota fazendo coisas diferentes.
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(/*anotacao pra dizer que to pegando o valor pela URI*/@PathVariable Integer id) {
-		Pedido obj = service.buscar(id);	//novamente a separacao de responsabilidades vide categoria service.
+	public ResponseEntity<Pedido> find(/*anotacao pra dizer que to pegando o valor pela URI*/@PathVariable Integer id) {
+		Pedido obj = service.find(id);	//novamente a separacao de responsabilidades vide categoria service.
 		//chamo categoria service, que chama categoria resource, cada classe com sua responsabilidade
 		return ResponseEntity.ok().body(obj);
 	}

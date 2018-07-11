@@ -18,7 +18,7 @@ public class CategoriaService {
 
 	// ou seja, essa é uma "regra" que quando der um buscar, vai retornar um item
 	// por id
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
 		// reparar a separacao das responsabilidades, por exemplo aqui instanciei um
 		// repo ali em cima, e uso o metodo dele de buscar no banco por id, cada classe
@@ -31,5 +31,10 @@ public class CategoriaService {
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
 		return repo.save(obj);
+	}
+	//atualiza obj no banco, igual salva
+	public Categoria update(Categoria obj) {
+		find(obj.getId()); //procuro o obj antes de salvar, por garantia
+		return repo.save(obj); //salva
 	}
 }
