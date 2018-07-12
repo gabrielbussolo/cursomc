@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import pro.gabrielferreira.cursomc.domain.Categoria;
@@ -56,5 +59,13 @@ public class CategoriaService {
 	// quero.
 	public List<Categoria> findAll() {
 		return repo.findAll();
+	}
+
+	// metodo para paginacao das categorias
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		// instancio o objeto pagereq com a forma que eu quero que o repo traga do banco
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		// passo pro repo a forma que eu quero que ele traga do banco pra mim.
+		return repo.findAll(pageRequest);
 	}
 }
