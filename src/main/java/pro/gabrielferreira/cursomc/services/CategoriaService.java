@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import pro.gabrielferreira.cursomc.domain.Categoria;
+import pro.gabrielferreira.cursomc.dto.CategoriaDTO;
 import pro.gabrielferreira.cursomc.repositories.CategoriaRepository;
 import pro.gabrielferreira.cursomc.services.exceptions.DataIntegrityException;
 import pro.gabrielferreira.cursomc.services.exceptions.ObjectNotFoundException;
@@ -67,5 +68,9 @@ public class CategoriaService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		// passo pro repo a forma que eu quero que ele traga do banco pra mim.
 		return repo.findAll(pageRequest);
+	}
+
+	public Categoria fromDTO(CategoriaDTO objDTO) {
+		return new Categoria(objDTO.getId(), objDTO.getNome());
 	}
 }

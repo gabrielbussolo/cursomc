@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,9 @@ public class CategoriaResource {
 
 	// metodo post para inserir categoria
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody /* anotacao pra popular obj com json */Categoria obj) {
+	// adicionado @valid pra validar o obj que esta chegando
+	public ResponseEntity<Void> insert(@Valid @RequestBody /* anotacao pra popular obj com json */CategoriaDTO objDTO) {
+		Categoria obj = service.fromDTO(objDTO); // converte o DTO pra Categoria
 		obj = service.insert(obj); // insere no banco de dados
 		// objeto do tipo URI pra criar e retornar a uri do objeto salvo
 		URI uri = ServletUriComponentsBuilder
@@ -54,8 +58,10 @@ public class CategoriaResource {
 
 	// metodo put para atualizar categoria
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	// pego json no request e instancio um obj, e pego o id pela url
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+	// pego json no request e instancio um obj, e pego o id pela url -- anotacao
+	// @valid par validar o objDTO
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDTO, @PathVariable Integer id) {
+		Categoria obj = service.fromDTO(objDTO); // converte DTO pra Categoria
 		obj.setId(id); // só por garantia, seto o id no obj
 		obj = service.update(obj); // update do obj no banco
 		return ResponseEntity.noContent().build();
