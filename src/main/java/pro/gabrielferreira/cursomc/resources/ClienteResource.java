@@ -1,5 +1,6 @@
 package pro.gabrielferreira.cursomc.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import pro.gabrielferreira.cursomc.domain.Cliente;
 import pro.gabrielferreira.cursomc.dto.ClienteDTO;
+import pro.gabrielferreira.cursomc.dto.ClienteNewDTO;
 import pro.gabrielferreira.cursomc.services.ClienteService;
 
 @RestController
@@ -30,6 +33,17 @@ public class ClienteResource {
 		Cliente obj = service.find(id);
 		
 		return ResponseEntity.ok().body(obj);
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	// adicionado @valid pra validar o obj que esta chegando
+	public ResponseEntity<Void> insert(
+			@Valid @RequestBody /* anotacao pra popular obj com json */ClienteNewDTO objDTO) {
+		Cliente obj = service.fromDTO(objDTO); // converte o DTO pra Categoria
+		obj = service.insert(obj); // insere no banco de dados
+		// objeto do tipo URI pra criar e retornar a uri do objeto salvo
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build(); // responde com http 201 e retorna a url do obj criado
 	}
 
 	// metodo put para atualizar categoria
