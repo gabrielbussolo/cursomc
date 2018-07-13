@@ -42,10 +42,13 @@ public class CategoriaService {
 
 	// atualiza obj no banco, igual salva
 	public Categoria update(Categoria obj) {
-		find(obj.getId()); // procuro o obj antes de salvar, por garantia
-		return repo.save(obj); // salva
+		Categoria newObj = find(obj.getId()); // procuro o obj antes de salvar, por garantia
+		updateData(newObj, obj);
+		return repo.save(newObj); // salva
 	}
 	
+
+
 	//deleta obj do banco pelo id
 	public void delete(Integer id) {
 		find(id); //procura obj antes de deletar
@@ -72,5 +75,9 @@ public class CategoriaService {
 
 	public Categoria fromDTO(CategoriaDTO objDTO) {
 		return new Categoria(objDTO.getId(), objDTO.getNome());
+	}
+
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
 	}
 }
