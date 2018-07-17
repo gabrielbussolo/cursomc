@@ -11,11 +11,18 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import pro.gabrielferreira.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED) // forma como ele vai criar as tabelar por causa das herancas
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type") // anotacao pro
+																									// jackson poder
+																									// instanciar as
+																									// classes filhas
+																									// com base no
+																									// parametro
 public abstract class Pagamento implements Serializable{
 
 	private static final long serialVersionUID = 1L;

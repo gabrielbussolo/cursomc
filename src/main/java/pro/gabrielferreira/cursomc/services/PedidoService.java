@@ -1,11 +1,18 @@
 package pro.gabrielferreira.cursomc.services;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import pro.gabrielferreira.cursomc.domain.ItemPedido;
+import pro.gabrielferreira.cursomc.domain.PagamentoComBoleto;
 import pro.gabrielferreira.cursomc.domain.Pedido;
+import pro.gabrielferreira.cursomc.domain.enums.EstadoPagamento;
+import pro.gabrielferreira.cursomc.repositories.ItemPedidoRepository;
+import pro.gabrielferreira.cursomc.repositories.PagamentoRepository;
 import pro.gabrielferreira.cursomc.repositories.PedidoRepository;
 import pro.gabrielferreira.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -14,16 +21,50 @@ import pro.gabrielferreira.cursomc.services.exceptions.ObjectNotFoundException;
 public class PedidoService {
 
 	@Autowired // instancia automaticamente a dependencia
-	private PedidoRepository repo;
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private BoletoService boletoService;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	private ProdutoService produtoService;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	// ou seja, essa é uma "regra" que quando der um buscar, vai retornar um item
 	// por id
 	public Pedido find(Integer id) {
-		Optional<Pedido> obj = repo.findById(id);
+		Optional<Pedido> obj = pedidoRepository.findById(id);
 		// reparar a separacao das responsabilidades, por exemplo aqui instanciei um
 		// repo ali em cima, e uso o metodo dele de buscar no banco por id, cada classe
 		// com sua responsabilidade
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado ! Id: " + id + ", Tipo: " + Pedido.class.getName()));
+	}
+
+	@Transactional
+	public Pedido insert(Pedido obj) {
+		obj.setId(null); // garanto que o id dele é nulo, pra deixar o repo dar o id
+		obj.setInstante(new Date()); // pego o instante que o pedido esta sendo gerado
+		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
+		obj.getPagamento().setPedido(obj); // seto o pedido atual no pagamento
+		if (obj.getPagamento() instanceof PagamentoComBoleto) { // se o pagamento for do tipo Pagamento com boleto dou
+																// uma data de vencimento pra ele
+			PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
+			boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
+		}
+		pedidoRepository.save(obj); // persisto o pedido
+		pagamentoRepository.save(obj.getPagamento()); // persisto o pagamento
+		for (ItemPedido ip : obj.getItens()) {
+			ip.setDesconto(0.0);
+			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setPedido(obj);
+		}
+		itemPedidoRepository.saveAll(obj.getItens()); // persisto os itenspedido
+		return obj; // retorno o obj (normalmente pro resources)
 	}
 }

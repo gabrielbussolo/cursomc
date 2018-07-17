@@ -5,9 +5,11 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import pro.gabrielferreira.cursomc.domain.enums.EstadoPagamento;
 @Entity
+@JsonTypeName("pagamentoComBoleto") // anotacao pro jack saber qual a classe que ele vai instanciar
 public class PagamentoComBoleto extends Pagamento { //nada de diferente alem de herdar pagamento
 	private static final long serialVersionUID = 1L;
 	@JsonFormat(pattern="dd/MM/yyyy")
