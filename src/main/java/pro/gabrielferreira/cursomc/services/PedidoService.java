@@ -35,6 +35,8 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 
+	@Autowired
+	private ClienteService clienteService;
 	// ou seja, essa é uma "regra" que quando der um buscar, vai retornar um item
 	// por id
 	public Pedido find(Integer id) {
@@ -50,6 +52,8 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null); // garanto que o id dele é nulo, pra deixar o repo dar o id
 		obj.setInstante(new Date()); // pego o instante que o pedido esta sendo gerado
+		// antes nao setava o cliente inteiro no pedido, apens o id, agora seta.
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj); // seto o pedido atual no pagamento
 		if (obj.getPagamento() instanceof PagamentoComBoleto) { // se o pagamento for do tipo Pagamento com boleto dou
@@ -61,10 +65,13 @@ public class PedidoService {
 		pagamentoRepository.save(obj.getPagamento()); // persisto o pagamento
 		for (ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			// antes nao setava o produto inteiro, agora seta.
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens()); // persisto os itenspedido
+		System.out.println(obj); // printa o pedido inteiro, com tostring ja implementado.
 		return obj; // retorno o obj (normalmente pro resources)
 	}
 }
