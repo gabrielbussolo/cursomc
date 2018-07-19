@@ -37,6 +37,10 @@ public class PedidoService {
 
 	@Autowired
 	private ClienteService clienteService;
+
+	@Autowired
+	private EmailService emailService;
+
 	// ou seja, essa é uma "regra" que quando der um buscar, vai retornar um item
 	// por id
 	public Pedido find(Integer id) {
@@ -71,7 +75,8 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens()); // persisto os itenspedido
-		System.out.println(obj); // printa o pedido inteiro, com tostring ja implementado.
+		emailService.sendOrderConfirmationEmail(obj); // se estiver no profile de teste vai retornar um mockemail, se
+														// tiver em producao vai retornar um smtpemail
 		return obj; // retorno o obj (normalmente pro resources)
 	}
 }

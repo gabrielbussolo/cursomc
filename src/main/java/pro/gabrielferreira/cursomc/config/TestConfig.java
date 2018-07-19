@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import pro.gabrielferreira.cursomc.services.DBService;
+import pro.gabrielferreira.cursomc.services.EmailService;
+import pro.gabrielferreira.cursomc.services.MockEmailService;
 
 @Configuration
 @Profile("test") // configuracoes para o perfil de teste
@@ -17,5 +19,12 @@ public class TestConfig {
 	public boolean instantiateDatabase() throws Exception {
 		dbService.instanciateTestDatabase();
 		return true;
+	}
+
+	// esse bean diz que quando eu injetar um Email service e tiver usando o profile
+	// de test, ele vai retornar um mockemailservice
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
 	}
 }
