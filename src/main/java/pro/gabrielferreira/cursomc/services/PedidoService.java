@@ -75,8 +75,9 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens()); // persisto os itenspedido
-		emailService.sendOrderConfirmationEmail(obj); // se estiver no profile de teste vai retornar um mockemail, se
-														// tiver em producao vai retornar um smtpemail
+
+		emailService.sendOrderConfirmationHtmlEmail(obj); // envia o email com html
+
 		return obj; // retorno o obj (normalmente pro resources)
 	}
 }
