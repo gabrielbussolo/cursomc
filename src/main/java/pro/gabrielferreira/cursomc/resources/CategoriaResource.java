@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,7 @@ public class CategoriaResource {
 	}
 
 	// metodo post para inserir categoria
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	// adicionado @valid pra validar o obj que esta chegando
 	public ResponseEntity<Void> insert(@Valid @RequestBody /* anotacao pra popular obj com json */CategoriaDTO objDTO) {
@@ -57,6 +59,7 @@ public class CategoriaResource {
 	}
 
 	// metodo put para atualizar categoria
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	// pego json no request e instancio um obj, e pego o id pela url -- anotacao
 	// @valid par validar o objDTO
@@ -68,6 +71,7 @@ public class CategoriaResource {
 	}
 	
 	//deleta categoria pegando pelo id da URI
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Categoria> delete(@PathVariable Integer id) {
 		service.delete(id);

@@ -2,7 +2,7 @@ package pro.gabrielferreira.cursomc.domain.enums;
 
 //enum de tipos de cliente, com sistema parecido com o do tipo cliente, armazena no banco o cod.
 public enum Perfil {
-	ADMIN(1, "ROLE_ADMIN"), CLIENTE(2, "ROLE_CLIENTE");
+	CLIENTE(1, "ROLE_CLIENTE"), ADMIN(2, "ROLE_ADMIN") ;
 
 	private int cod;
 	private String descricao;
