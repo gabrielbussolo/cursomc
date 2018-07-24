@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pro.gabrielferreira.cursomc.domain.Cliente;
 import pro.gabrielferreira.cursomc.domain.ItemPedido;
 import pro.gabrielferreira.cursomc.domain.PagamentoComBoleto;
 import pro.gabrielferreira.cursomc.domain.Pedido;
@@ -14,6 +18,8 @@ import pro.gabrielferreira.cursomc.domain.enums.EstadoPagamento;
 import pro.gabrielferreira.cursomc.repositories.ItemPedidoRepository;
 import pro.gabrielferreira.cursomc.repositories.PagamentoRepository;
 import pro.gabrielferreira.cursomc.repositories.PedidoRepository;
+import pro.gabrielferreira.cursomc.security.UserSS;
+import pro.gabrielferreira.cursomc.services.exceptions.AuthorizationException;
 import pro.gabrielferreira.cursomc.services.exceptions.ObjectNotFoundException;
 
 //aqui é onde ficam as regras de negocio
@@ -79,5 +85,15 @@ public class PedidoService {
 		emailService.sendOrderConfirmationHtmlEmail(obj); // envia o email com html
 
 		return obj; // retorno o obj (normalmente pro resources)
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.find(user.getId());
+		return pedidoRepository.findByCliente(cliente, pageRequest);
 	}
 }
