@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import pro.gabrielferreira.cursomc.domain.Cliente;
 import pro.gabrielferreira.cursomc.domain.Pedido;
 
 //implementa a interface de forma abstrata, apenas para implementar o metodo "principal" como prepareSimpleMailMessageFromPedido
@@ -80,5 +81,22 @@ public abstract class AbstractEmailService implements EmailService {
 		context.setVariable("pedido", obj); // pedido é o nome da variavel que esta sendo usada no thymeleaf
 		return templateEngine.process("email/confirmacaoPedido", context); // passo o template e processo ele com o
 																			// templateEngine
+	}
+	
+	public void sendNewPasswordEmail(Cliente cliente, String newPass) {
+		SimpleMailMessage sm = prepareNewPasswordEmail(cliente, newPass);
+		sendEmail(sm);
+	}
+
+	protected SimpleMailMessage prepareNewPasswordEmail(Cliente cliente, String newPass) {
+		// instancia o obj simple email
+		SimpleMailMessage sm = new SimpleMailMessage();
+		// seta configs pra ele
+		sm.setTo(cliente.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("Solicitacao de nova senha");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("Nova senha: " + newPass);
+		return sm; // retorna o obj ja configurado e pronto
 	}
 }
