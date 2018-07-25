@@ -48,6 +48,8 @@ public class Cliente implements Serializable {
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
+	
+	private String imageUrl;
 
 	// aqui é declarada telefones, como uma entidade, ja relacionada com o cliente,
 	// por ser uma entidade muito simples
@@ -193,6 +195,14 @@ public class Cliente implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 }
