@@ -1,5 +1,6 @@
 package pro.gabrielferreira.cursomc.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import pro.gabrielferreira.cursomc.domain.Cidade;
 import pro.gabrielferreira.cursomc.domain.Cliente;
@@ -29,6 +31,9 @@ import pro.gabrielferreira.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ClienteService {
+	@Autowired
+	private S3Service s3service;
+	
 	@Autowired
 	private BCryptPasswordEncoder pe;
 	
@@ -108,5 +113,9 @@ public class ClienteService {
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
+	}
+	
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3service.uploadFile(multipartFile);
 	}
 }
