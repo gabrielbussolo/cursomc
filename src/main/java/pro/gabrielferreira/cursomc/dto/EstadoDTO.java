@@ -7,19 +7,27 @@ import pro.gabrielferreira.cursomc.domain.Estado;
 public class EstadoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private String estado;
+	private Integer id;
+	private String nome;
 
 	public EstadoDTO() {}
 	public EstadoDTO(Estado estado) {
-		this.estado = estado.getNome();
+		this.setId(estado.getId());
+		this.nome = estado.getNome();
 	}
 	
 	public String getEstado() {
-		return estado;
+		return nome;
 	}
 
 	public void setEstado(String estado) {
-		this.estado = estado;
+		this.nome = estado;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 }

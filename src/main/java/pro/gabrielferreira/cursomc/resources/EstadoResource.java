@@ -17,19 +17,21 @@ import pro.gabrielferreira.cursomc.dto.CidadeDTO;
 import pro.gabrielferreira.cursomc.dto.EstadoDTO;
 import pro.gabrielferreira.cursomc.repositories.CidadeRepository;
 import pro.gabrielferreira.cursomc.repositories.EstadoRepository;
+import pro.gabrielferreira.cursomc.services.CidadeService;
+import pro.gabrielferreira.cursomc.services.EstadoService;
 
 @RestController
 @RequestMapping(value = "/estados")
 public class EstadoResource {
 	@Autowired
-	private EstadoRepository estadoRepository;
+	private EstadoService estadoService;
 
 	@Autowired
-	private CidadeRepository cidadeRepository;
+	private CidadeService cidadeService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<EstadoDTO>> findAll() {
-		List<Estado> listEstados = estadoRepository.findAllByOrderByNome();
+		List<Estado> listEstados = estadoService.findAll();
 
 		List<EstadoDTO> listEstadosDTO = listEstados.stream().map(obj -> new EstadoDTO(obj))
 				.collect(Collectors.toList());
@@ -38,13 +40,10 @@ public class EstadoResource {
 
 	@RequestMapping(value = "/{idEstado}/cidades", method = RequestMethod.GET)
 	public ResponseEntity<List<CidadeDTO>> findCidades(@PathVariable Integer idEstado) {
-
-		List<Cidade> listCidade = cidadeRepository.findAll();
-
+		List<Cidade> listCidade = cidadeService.findByEstado(idEstado);
 		List<CidadeDTO> listCidadeDTO = listCidade.stream()//
-				.filter(obj -> obj.getEstado().getId() == idEstado)//
-				.map(obj -> new CidadeDTO(obj)).collect(Collectors.toList());
-
+				.map(obj -> new CidadeDTO(obj))
+				.collect(Collectors.toList());
 		return ResponseEntity.ok().body(listCidadeDTO);
 	}
 }
